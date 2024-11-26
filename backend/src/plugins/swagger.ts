@@ -22,6 +22,7 @@ const options : SwaggerOptions = {
             {name: 'properties', description: 'Property description'},
             {name: 'favorites', description: 'Favorites description'},
             {name: 'admin', description: 'Admin description'},
+            {name: 'dark_pass', description: 'Dark list description'},
         ],
         components: {
             securitySchemes: {

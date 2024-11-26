@@ -12,6 +12,11 @@ CREATE table if not exists users (
     registration_date timestamp default now() not null
 );
 
+create table dark_pass (
+    id serial primary key,
+    password text not null
+);
+
 CREATE table if not exists properties (
     id SERIAL primary key,
     title varchar(100) not null,
@@ -68,7 +73,12 @@ insert into users (name, lastname, email, password, role)
           ('Ana', 'Sena', 'anaclarasenanunez@gmail.com', crypt('Ana0411!', gen_salt('bf')), 'admin'),
           ('Juan', 'Pérez', 'juan@correo.com', crypt('28DESeptiembre2024!', gen_salt('bf')), 'user'),
           ('Martin', 'Martinez', 'mm@correo.com', crypt('28DESeptiembre2024!', gen_salt('bf')), 'user'),
+          ('Jorge', 'Melnik', 'jmelnik19@gmail.com', crypt('@Jmelnik19.', gen_salt('bf')), 'admin'),
+          ('Carlota', 'Melnik', 'cmelnik19@gmail.com', crypt('@Cmelnik14.', gen_salt('bf')), 'user'),
           ('Jose', 'Gutierrez', 'jg@correo.com', crypt('28DESeptiembre2024!', gen_salt('bf')), 'user');
+
+insert into dark_pass (password)
+      values (crypt('@Contraseña123', gen_salt('bf')));
 
 insert into properties (title, description, price, location, number_of_rooms, number_of_bathrooms, main_img_url, contact_data, property_type)
     values('Casa en el bosque', 'Casa en el bosque con vista al lago', 100000, 'Bosque de la luna', 3, 2, 'https://www.lacasadelbosque.com.uy/assets/images/la-casa-del-bosque-2019-20-1320x880.jpg', '

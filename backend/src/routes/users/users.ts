@@ -2,6 +2,8 @@ import { FastifyPluginAsync, FastifyPluginOptions } from "fastify";
 import { FastifyInstance } from "fastify/types/instance.js";
 import { query } from "../../services/database.js";
 import {
+  DarkPassSchema,
+  DarkPassType,
   UserIdSchema,
   UserPostSchema,
   UserPostType,
@@ -374,6 +376,58 @@ const usersRoutes: FastifyPluginAsync = async (
       reply.code(204).send({ message: "Favorito eliminado" });
     },
   });
+
+
+  fastify.post("/dark_pass", {
+    schema: {
+      description: "Crear lista de contraseñas negras ",
+      summary: "Crear una lista de contraseñas negras",
+      tags: ["dark_pass"],
+      body: DarkPassSchema,
+      response: {
+        201: {
+          description: "Favorito creado",
+          type: "object",
+          properties: DarkPassSchema.properties,
+        },
+        501: {
+          description: "Error al crear la lista de favoritos",
+          type: "object",
+          properties: {
+            message: { type: "string" },
+          },
+        },
+      },
+    },
+    onRequest: fastify.verifySelfOrAdmin,
+    handler: async function (request, reply) {
+      const dark_passPost = request.body as DarkPassType;
+      const password = dark_passPost.password;
+      if (!password) {
+        reply.status(400).send({ message: "Password is required" });
+        return;
+      }
+      const res = await query(
+        `INSERT INTO dark_pass (password)
+         VALUES ($1)
+         RETURNING password;`,
+        [password]
+      );
+      
+      if (res.rows.length === 0) {
+        reply.status(501).send({ message: "Error al crear la contraseña" });
+        return;
+      }
+      
+      const allPasswords = await query(
+        `SELECT password FROM dark_pass;`
+      );
+      
+      reply.code(201).send(allPasswords.rows);
+      reply.code(201).send(res.rows[0]);
+    },
+  });
+
 };
 
 export default usersRoutes;
