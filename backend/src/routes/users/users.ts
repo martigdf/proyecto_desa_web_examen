@@ -408,22 +408,13 @@ const usersRoutes: FastifyPluginAsync = async (
         return;
       }
       const res = await query(
-        `INSERT INTO dark_pass (password)
-         VALUES ($1)
-         RETURNING password;`,
+        `INSERT INTO dark_pass
+                (password)
+                VALUES ($1)
+                RETURNING password;`,
         [password]
       );
       
-      if (res.rows.length === 0) {
-        reply.status(501).send({ message: "Error al crear la contraseña" });
-        return;
-      }
-      
-      const allPasswords = await query(
-        `SELECT password FROM dark_pass;`
-      );
-      
-      reply.code(201).send(allPasswords.rows);
       reply.code(201).send(res.rows[0]);
     },
   });
