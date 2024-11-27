@@ -1,3 +1,5 @@
+POR LAS DUDAS NO ME DEJA HACERLO PRIVADO :D
+
 # Proyecto sobre comparación de alquileres: RentMatch
 
 ## Integrantes
