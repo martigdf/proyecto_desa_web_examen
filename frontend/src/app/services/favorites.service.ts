@@ -8,6 +8,7 @@ import { BackendApiService } from './backend-api.service';
 })
 export class FavoritesService {
   private favoriteList: Property[] = [];
+  private recomendadoList: Property[] = [];
 
   constructor(
     private authService: AuthService,
